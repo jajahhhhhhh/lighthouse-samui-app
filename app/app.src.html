@@ -1,0 +1,637 @@
+<title>Lighthouse Samui</title>
+
+<style>
+/* @FONTS@ */
+
+:root{
+  --shore:#F0FAE1; --mist:#E1EECC; --leaf:#CCDBB2; --sage:#AEBF92;
+  --moss:#6B7A52; --fern:#4F5C3A; --pine:#3D472B; --palm:#272E1B;
+  --clay:#C67139; --clay-500:#D9834A; --clay-100:#FDF3EC; --clay-700:#A85A2A;
+  --paper:#F9F4ED; --n500:#9A958C; --n800:#2E2B25;
+  --r-md:16px; --r-lg:28px; --r-pill:999px;
+  --display:'Caprasimo',Georgia,serif;
+  --ui:'Figtree','Noto Sans Thai',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --shadow:0 12px 32px rgba(39,46,27,.22);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--palm); color:var(--palm);
+  font-family:var(--ui); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh; display:grid; place-items:center;
+}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;
+  cursor:pointer;text-align:inherit;font-family:var(--ui)}
+:focus-visible{outline:2.5px solid var(--clay);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── shell ─────────────────────────────────────────────── */
+.app{
+  width:min(430px,100vw); height:min(880px,100dvh);
+  background:var(--shore); border-radius:34px; overflow:hidden;
+  display:flex; flex-direction:column; position:relative;
+  box-shadow:var(--shadow),0 0 0 1px rgba(39,46,27,.14);
+}
+@media (max-width:470px){
+  .app{width:100vw;height:100dvh;border-radius:0;box-shadow:none}
+}
+.view{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:26px 20px calc(20px + env(safe-area-inset-bottom))}
+.view.dark{background:var(--palm)}
+.view::-webkit-scrollbar{width:0}
+
+/* ── type ──────────────────────────────────────────────── */
+.d{font-family:var(--display);font-weight:400;line-height:1.08}
+.h1{font-family:var(--display);font-size:28px;line-height:1.1;margin:0}
+.kicker{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--fern);
+  text-transform:uppercase}
+.kicker.on-dark{color:var(--sage)}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--fern);font-size:12.5px}
+.legal{font-size:11px;color:var(--fern);text-align:center;line-height:1.55;margin-top:12px}
+
+/* ── atoms ─────────────────────────────────────────────── */
+.stack{display:flex;flex-direction:column}
+.row-g{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--sage);
+  border-radius:var(--r-pill);padding:8px 15px;font-size:12.5px;font-weight:600;
+  color:var(--pine);background:transparent;transition:background .12s,color .12s}
+.pill[aria-pressed="true"]{background:var(--palm);border-color:var(--palm);color:var(--mist)}
+.pill.tag{padding:6px 14px}
+.pill.leaf{background:var(--leaf);border-color:var(--leaf);color:var(--palm)}
+.btn{display:block;width:100%;text-align:center;border-radius:var(--r-pill);
+  padding:15px 20px;font-weight:700;font-size:14.5px;transition:filter .12s}
+.btn:hover{filter:brightness(.96)}
+.btn.primary{background:var(--clay);color:var(--clay-100)}
+.btn.solid{background:var(--mist);color:var(--palm)}
+.btn.ghost{border:1.5px solid var(--sage);color:var(--palm);font-weight:600}
+.btn.ghost.on-dark{border-color:var(--fern);color:var(--leaf)}
+.card{background:var(--paper);border-radius:var(--r-lg);padding:18px 20px;width:100%;
+  text-align:left;display:block}
+.card.dark{background:var(--palm);color:var(--mist)}
+.spec{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  border:1.5px solid var(--sage);border-radius:var(--r-pill);padding:12px 20px;width:100%}
+.row{display:flex;gap:12px;align-items:center;background:var(--paper);
+  border-radius:var(--r-md);padding:12px;width:100%;text-align:left}
+.photo{background:repeating-linear-gradient(45deg,var(--mist),var(--mist) 6px,
+  var(--shore) 6px,var(--shore) 12px);display:grid;place-items:center;flex:none;
+  font-size:8px;letter-spacing:.5px;color:var(--moss);font-weight:600}
+.plus{flex:none;width:36px;height:36px;border-radius:var(--r-pill);background:var(--palm);
+  color:var(--mist);display:grid;place-items:center;font-weight:800;font-size:19px}
+.step{width:32px;height:32px;border-radius:var(--r-pill);border:1.5px solid var(--sage);
+  display:grid;place-items:center;font-weight:800;color:var(--palm);flex:none}
+.price{font-family:var(--display);color:var(--clay-700)}
+
+/* ── tab bar ───────────────────────────────────────────── */
+.tabs[hidden]{display:none}   /* a class-level display:flex outranks [hidden] */
+.tabs{flex:none;display:flex;justify-content:space-around;
+  padding:9px 8px calc(6px + env(safe-area-inset-bottom));
+  border-top:1.5px solid var(--leaf);background:var(--paper)}
+.tab{position:relative;text-align:center;color:var(--n500);min-width:52px;padding:4px 6px;
+  border-radius:12px}
+.tab[aria-current="page"]{color:var(--palm)}
+.tab .ic{font-size:17px;line-height:1.2}
+.tab .lb{font-size:9.5px;font-weight:700;margin-top:1px}
+.badge{position:absolute;top:-1px;right:4px;background:var(--clay);color:var(--clay-100);
+  border-radius:var(--r-pill);min-width:17px;height:17px;font-size:10px;font-weight:800;
+  display:grid;place-items:center;padding:0 4px}
+
+/* ── gate ──────────────────────────────────────────────── */
+.gate{min-height:100%;display:flex;flex-direction:column;justify-content:center;
+  text-align:center;gap:0}
+.mark{display:inline-flex;flex-direction:column;align-items:center}
+.mark i{display:block;background:currentColor}
+.mark .lamp{width:8px;height:8px;border-radius:50%}
+.mark .top{width:21px;height:11px;border-radius:4px 4px 0 0;margin-top:2px}
+.mark .tower{width:27px;height:35px;border-radius:0 0 5px 5px;
+  clip-path:polygon(18% 0,82% 0,100% 100%,0 100%)}
+.mark .base{width:42px;height:6px;border-radius:3px;margin-top:2px}
+.disc{width:96px;height:96px;border-radius:50%;background:var(--mist);color:var(--palm);
+  display:grid;place-items:center;margin:0 auto}
+
+.fade{animation:fade .22s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+
+<main class="app">
+  <div class="view" id="view" tabindex="-1"></div>
+  <nav class="tabs" id="tabs" hidden></nav>
+</main>
+
+<script>
+const T = {
+  en:{
+    home:'Home',menu:'Menu',bagTab:'Bag',learn:'Learn',profile:'Profile',
+    all:'All',daytime:'Daytime',evening:'Evening',balanced:'Balanced',cbd:'CBD',
+    flower:'Flower',bar:'Bar',tea:'Tea',devices:'Devices',
+    welcome:'Welcome to',ageQ:'This app is for adults 20 and older.',ageQ2:'Are you 20+?',
+    yes:"Yes, I'm 20 or older",no:'Not yet',
+    denied:"Come back when you're 20. Our coffee is worth the wait.",
+    gateFoot:'Guidance and consultation in-store · Chaweng, Ko Samui',
+    sawasdee:'SAWASDEE',pts:'pts · Gold member',rewards:'Rewards',
+    houseKicker:'HOUSE CULTIVAR',open:'Open now · 10:00 – 02:00 · Coffee · Bar · Consoles',
+    visit:'Visit',barTeaser:'Cocktails ฿199 · Chinese tea · Devices',
+    learnTeaser:'New to cannabis? Start here',orderPickup:'Order for pickup',
+    menuTitle:'Menu',barNote:'Served at the bar · Happy hour daily',
+    teaNote:'Chinese tea · 700 ml pots',cocktails:'Signature cocktails',beer:'Beer',shots:'Shots',
+    taste:'Taste',effect:'Effect',back:'Cultivars',addToBag:'Add to bag',
+    pickupNote:'In-store pickup only · Adults 20+ · ID required',
+    bagTitle:'Pickup bag',total:'Total (pay in-store)',place:'Place pickup order',
+    bagNote:'Pickup at Lighthouse, Chaweng · Adults 20+ · ID required',
+    emptyTitle:'Your bag is empty',emptySub:'Add cultivars from the menu for in-store pickup.',
+    browse:'Browse menu',orderedTitle:'Order in!',
+    orderedSub:'Show this at the counter with your ID.',newBag:'Start a new bag',
+    learnTitle:'Learn',learnSub:'Short guides from our team — no hype, just guidance.',
+    talk:'Prefer to talk? Visit us',member:'Member since Jan 2026',
+    toReward:'pts to your next reward',storeInfo:'Store info & hours',
+    history:'Order history',language:'Language',findUs:'Find us',
+    openDaily:'Open now · Daily 10:00 – 02:00',maps:'Open in Maps',call:'Call 098 886 2998',
+    locFoot:'Adults 20+ · Consultation and guidance in-store',grams:'g',ml:'700 ml',
+    startHere:'START HERE',guide:'GUIDE'
+  },
+  th:{
+    home:'หน้าแรก',menu:'เมนู',bagTab:'ตะกร้า',learn:'เรียนรู้',profile:'โปรไฟล์',
+    all:'ทั้งหมด',daytime:'กลางวัน',evening:'กลางคืน',balanced:'สมดุล',cbd:'CBD',
+    flower:'ดอกไม้',bar:'บาร์',tea:'ชา',devices:'อุปกรณ์',
+    welcome:'ยินดีต้อนรับสู่',ageQ:'แอปนี้สำหรับผู้ที่มีอายุ 20 ปีขึ้นไป',ageQ2:'คุณอายุ 20 ปีขึ้นไปหรือไม่?',
+    yes:'ใช่ ฉันอายุ 20 ปีขึ้นไป',no:'ยังไม่ถึง',
+    denied:'กลับมาใหม่เมื่ออายุครบ 20 ปีนะ กาแฟของเรารอคุณอยู่',
+    gateFoot:'ให้คำปรึกษาที่ร้าน · เฉวง เกาะสมุย',
+    sawasdee:'สวัสดี',pts:'แต้ม · สมาชิกโกลด์',rewards:'รางวัล',
+    houseKicker:'สายพันธุ์ประจำร้าน',open:'เปิดอยู่ · 10:00 – 02:00 · กาแฟ · บาร์ · เกม',
+    visit:'เยี่ยมชม',barTeaser:'ค็อกเทล ฿199 · ชาจีน · อุปกรณ์',
+    learnTeaser:'มือใหม่? เริ่มต้นที่นี่',orderPickup:'สั่งรับที่ร้าน',
+    menuTitle:'เมนู',barNote:'เสิร์ฟที่บาร์ · แฮปปี้อาวร์ทุกวัน',
+    teaNote:'ชาจีน · กา 700 มล.',cocktails:'ค็อกเทลซิกเนเจอร์',beer:'เบียร์',shots:'ช็อต',
+    taste:'รสชาติ',effect:'ฤทธิ์',back:'สายพันธุ์',addToBag:'เพิ่มลงตะกร้า',
+    pickupNote:'รับที่ร้านเท่านั้น · อายุ 20+ · ต้องแสดงบัตร',
+    bagTitle:'ตะกร้ารับที่ร้าน',total:'รวม (ชำระที่ร้าน)',place:'สั่งจองรับที่ร้าน',
+    bagNote:'รับที่ Lighthouse เฉวง · อายุ 20+ · ต้องแสดงบัตร',
+    emptyTitle:'ตะกร้าว่างอยู่',emptySub:'เพิ่มสายพันธุ์จากเมนูเพื่อรับที่ร้าน',
+    browse:'ดูเมนู',orderedTitle:'สั่งแล้ว!',
+    orderedSub:'แสดงหน้านี้ที่เคาน์เตอร์พร้อมบัตรประชาชน',newBag:'เริ่มตะกร้าใหม่',
+    learnTitle:'เรียนรู้',learnSub:'คู่มือสั้น ๆ จากทีมของเรา — ไม่โฆษณา แค่แนะนำ',
+    talk:'อยากคุยกับเรา? เยี่ยมชม',member:'สมาชิกตั้งแต่ ม.ค. 2026',
+    toReward:'แต้มถึงรางวัลถัดไป',storeInfo:'ข้อมูลร้าน และเวลาเปิด',
+    history:'ประวัติการสั่งซื้อ',language:'ภาษา',findUs:'ค้นหาร้าน',
+    openDaily:'เปิดทุกวัน · 10:00 – 02:00',maps:'เปิดในแผนที่',call:'โทร 098 886 2998',
+    locFoot:'อายุ 20+ · ให้คำปรึกษาที่ร้าน',grams:'ก.',ml:'700 มล.',
+    startHere:'เริ่มที่นี่',guide:'คู่มือ'
+  }
+};
+
+const STRAINS = [
+  {id:1,name:'Lighthouse OG',type:'hybrid',label:'balanced',tags:['Balanced','Steady','Pine'],price:380,
+   desc:'Our signature house cultivar. Balanced and reliable — the character we named the beacon after. Pine-forward with soft herbal notes.',
+   descTh:'สายพันธุ์ประจำร้าน สมดุลและไว้ใจได้ กลิ่นสนเด่น ตามด้วยกลิ่นสมุนไพรอ่อน ๆ'},
+  {id:2,name:'Golden Light',type:'sativa',label:'daytime',tags:['Citrus','Uplifting','Light'],price:350,
+   desc:'Bright citrus and tropical notes on the nose. A lighter, uplifting character our team often suggests for daytime.',
+   descTh:'กลิ่นส้มสดใสและผลไม้เขตร้อน ให้ความรู้สึกเบาสบาย ทีมงานมักแนะนำสำหรับกลางวัน'},
+  {id:3,name:'Mango Tide',type:'sativa',label:'daytime',tags:['Fruity','Bright','Fresh'],price:350,
+   desc:'Ripe mango meets a fresh sea breeze. A brighter, sociable character with a fruity aroma.',
+   descTh:'มะม่วงสุกผสมลมทะเล กลิ่นผลไม้ ให้ความรู้สึกสดใสและเข้าสังคมง่าย'},
+  {id:4,name:'Night Harbour',type:'indica',label:'evening',tags:['Earthy','Settling','Rich'],price:380,
+   desc:'Deep earth and vanilla aromas. A heavier, settling character many prefer later in the evening.',
+   descTh:'กลิ่นดินลึกและวานิลลา ให้ความรู้สึกผ่อนคลาย เหมาะกับช่วงค่ำ'},
+  {id:5,name:'Storm Shelter',type:'indica',label:'evening',tags:['Full-bodied','Kush','Deep'],price:420,
+   desc:'Dense and full in character, with a classic kush aroma. One our team reserves for more experienced guests.',
+   descTh:'เข้มข้นเต็มตัว กลิ่นคุชคลาสสิก ทีมงานแนะนำสำหรับผู้มีประสบการณ์'},
+  {id:6,name:'Calm Waters',type:'cbd',label:'cbd',tags:['Floral','Gentle','Clear'],price:320,
+   desc:'A CBD-rich, gentler character with a floral aroma. The one our team most often suggests for those newer to cannabis.',
+   descTh:'CBD สูง อ่อนโยน กลิ่นดอกไม้ ทีมงานมักแนะนำสำหรับมือใหม่'},
+  {id:7,name:'Sunrise Point',type:'sativa',label:'daytime',tags:['Lemon','Lively','Clear'],price:350,
+   desc:'Lemon and grapefruit aromas with a clean finish. A lively, clear-headed character for the start of the day.',
+   descTh:'กลิ่นเลมอนและเกรปฟรุต จบสะอาด สดชื่น เหมาะกับช่วงเช้า'},
+  {id:8,name:'Midnight Cove',type:'indica',label:'evening',tags:['Grape','Berry','Settling'],price:400,
+   desc:'Ripe grape and dark berry aromas. A full, deeply settling character our team suggests for a quiet night in.',
+   descTh:'กลิ่นองุ่นสุกและเบอร์รีเข้ม ผ่อนคลายลึก เหมาะกับค่ำคืนเงียบ ๆ'},
+  {id:9,name:'Beacon Blend',type:'hybrid',label:'balanced',tags:['Pine','Herbal','Even'],price:360,
+   desc:'Pine and soft herbal notes. An even, dependable character — a steady middle-ground our regulars come back to.',
+   descTh:'กลิ่นสนและสมุนไพรอ่อน สมดุล ไว้ใจได้ ลูกค้าประจำกลับมาหาเสมอ'},
+  {id:10,name:'Coral Drift',type:'cbd',label:'cbd',tags:['Floral','Tropical','Gentle'],price:320,
+   desc:'Floral and light tropical aromas. A gentle, CBD-rich character our team often points newer guests toward.',
+   descTh:'กลิ่นดอกไม้และผลไม้เขตร้อนอ่อน ๆ CBD สูง อ่อนโยน เหมาะกับมือใหม่'}
+];
+
+const BAR = [
+  {key:'cocktails',items:[['Mojito Madness',199],['Find Me in the Dark',199],['Green Dream',199],
+    ['Berry Bliss Martini',199],['Lift & Laughs',199],['Coconut Breeze',199],['Midnight Spice',199]]},
+  {key:'beer',items:[['Singha',95],['Leo',95],['Chang',95],['Corona',115]]},
+  {key:'shots',items:[['Grand Marnier',149],['Vodka',99],['Tequila',99],['Whisky',99]]}
+];
+const TEAS = [
+  {name:"Shu Pu'er",taste:'Earthy, nutty, deep',effect:'Relaxes body and mind',
+   tasteTh:'กลิ่นดิน ถั่ว เข้มลึก',effectTh:'ผ่อนคลายกายและใจ'},
+  {name:"Sheng Pu'er",taste:'Herbal, tangy, mineral',effect:'Energizing, sharpens focus',
+   tasteTh:'สมุนไพร เปรี้ยวอ่อน แร่ธาตุ',effectTh:'กระปรี้กระเปร่า เพิ่มสมาธิ'},
+  {name:'Da Hong Pao',taste:'Roasted, floral, spicy',effect:'Uplifting, warming, grounding',
+   tasteTh:'คั่ว ดอกไม้ เผ็ดร้อน',effectTh:'สดชื่น อบอุ่น มั่นคง'},
+  {name:'Tie Guan Yin',taste:'Creamy, floral, fresh',effect:'Refreshing, mood-lifting',
+   tasteTh:'นุ่มละมุน ดอกไม้ สดชื่น',effectTh:'สดชื่น อารมณ์ดี'}
+];
+const DEVICES = [
+  ['Straight-tube glass bong',1799],['Glow percolator bong',1499],['Mini dab rig + banger',999],
+  ['Silicone unicorn pipe',750],['Rainbow herb grinder',499],['Classic herb grinder',399]
+];
+const GUIDES = [
+  {n:'01',title:'New to cannabis?',titleTh:'มือใหม่ใช่ไหม?',
+   body:'Start low, go slow. What to expect on a first visit, and why our team asks the questions they ask.',
+   bodyTh:'เริ่มน้อย ไปช้า ๆ สิ่งที่จะเจอในการมาครั้งแรก และเหตุผลที่ทีมงานถามคำถาม'},
+  {n:'02',title:'Daytime vs evening',titleTh:'กลางวัน กับ กลางคืน',
+   body:'How we group our cultivars by character — bright and sociable, settling and restful, or balanced in between.',
+   bodyTh:'เราแบ่งสายพันธุ์ตามลักษณะ — สดใสเข้าสังคม ผ่อนคลายพักผ่อน หรือสมดุลตรงกลาง'},
+  {n:'03',title:'Reading a label',titleTh:'อ่านฉลากอย่างไร',
+   body:'THC-forward, CBD-rich, terpenes — what the words on our shelf cards actually mean for how it feels.',
+   bodyTh:'THC เด่น CBD สูง เทอร์ปีน — คำเหล่านี้บนป้ายหมายถึงอะไร'}
+];
+
+const POINTS = 320, GOAL = 500;
+const FILTERS = [['all','all'],['sativa','daytime'],['indica','evening'],
+  ['hybrid','balanced'],['cbd','cbd']];
+const CATS = ['flower','bar','tea','devices'];
+const TABS = [['home','⌂'],['menu','☰'],['bag','◎'],['learn','✦'],['profile','◍']];
+
+let S = {view:'gate',cat:'flower',filter:'all',strain:1,bag:[],ordered:false,
+         lang:'en',denied:false,code:''};
+try{
+  const saved = JSON.parse(localStorage.getItem('lh') || '{}');
+  if(saved.lang) S.lang = saved.lang;
+  if(saved.adult) S.view = 'home';
+}catch(e){}
+const save = () => {
+  try{ localStorage.setItem('lh', JSON.stringify({lang:S.lang, adult:S.view!=='gate'})); }
+  catch(e){}
+};
+
+const esc = s => String(s).replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const t = () => T[S.lang];
+const th = () => S.lang === 'th';
+const baht = n => '฿' + n.toLocaleString('en-US');
+const perG = n => baht(n) + ' / g';
+const mark = () => '<span class="mark"><i class="lamp"></i><i class="top"></i>'
+  + '<i class="tower"></i><i class="base"></i></span>';
+const bagCount = () => S.bag.reduce((a,b) => a + b.qty, 0);
+const bagTotal = () => S.bag.reduce((a,b) =>
+  a + b.qty * STRAINS.find(s => s.id === b.id).price, 0);
+const strainDesc = s => th() ? s.descTh : s.desc;
+const labelOf = s => t()[s.label] || s.label;
+
+/* ── views ─────────────────────────────────────────────── */
+function vGate(){
+  return `<div class="gate">
+    <div class="disc">${mark()}</div>
+    <h1 class="d" style="font-size:32px;color:var(--mist);margin:20px 0 0">
+      ${esc(t().welcome)}<br>lighthouse</h1>
+    <p class="kicker on-dark" style="margin:12px 0 0;letter-spacing:3.5px">
+      CANNABIS SHOP · BAR · CAFÉ · SAMUI</p>
+    <p style="color:var(--leaf);margin:22px 0 0;font-size:14px">
+      ${esc(t().ageQ)}<br>${esc(t().ageQ2)}</p>
+    <div class="stack" style="gap:10px;margin-top:24px">
+      <button class="btn solid" data-act="gate-yes">${esc(t().yes)}</button>
+      <button class="btn ghost on-dark" data-act="gate-no">${esc(t().no)}</button>
+    </div>
+    <div class="row-g" style="justify-content:center;margin-top:20px">
+      <button class="pill" style="border-color:var(--fern);color:${S.lang==='en'?'var(--palm)':'var(--sage)'};
+        background:${S.lang==='en'?'var(--mist)':'transparent'}"
+        data-act="lang" data-arg="en" aria-pressed="${S.lang==='en'}">EN</button>
+      <button class="pill" style="border-color:var(--fern);color:${th()?'var(--palm)':'var(--sage)'};
+        background:${th()?'var(--mist)':'transparent'}"
+        data-act="lang" data-arg="th" aria-pressed="${th()}">ไทย</button>
+    </div>
+    ${S.denied ? `<p style="color:var(--sage);margin:18px 0 0;font-size:13px" role="status">
+      ${esc(t().denied)}</p>` : ''}
+    <p style="color:var(--moss);margin:20px 0 0;font-size:11.5px;line-height:1.6">
+      ${esc(t().gateFoot)}</p>
+  </div>`;
+}
+
+function vHome(){
+  const house = STRAINS[0];
+  return `<header style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <div><p class="kicker" style="margin:0">${esc(t().sawasdee)} ☀</p>
+      <p class="d" style="font-size:28px;margin:2px 0 0">lighthouse</p></div>
+    <button aria-label="${esc(t().profile)}" data-act="tab" data-arg="profile"
+      style="width:42px;height:42px;border-radius:50%;background:var(--n800);
+      color:var(--clay-100);font-weight:700;flex:none">A</button>
+  </header>
+
+  <button class="spec" style="margin-top:16px" data-act="tab" data-arg="profile">
+    <span style="font-size:13px;font-weight:600">✦ <span class="num">${POINTS}</span> ${esc(t().pts)}</span>
+    <span style="font-size:12.5px;font-weight:700;color:var(--fern);white-space:nowrap">
+      ${esc(t().rewards)} →</span></button>
+
+  <button class="card dark" style="margin-top:14px" data-act="open" data-arg="1">
+    <p class="kicker on-dark" style="margin:0">${esc(t().houseKicker)}</p>
+    <p class="d" style="font-size:30px;margin:6px 0 0">${esc(house.name)}</p>
+    <p style="font-size:12.5px;margin:6px 0 0;color:var(--leaf)">
+      ${house.tags.join(' · ')}</p>
+    <span style="display:flex;justify-content:space-between;align-items:center;
+      gap:12px;margin-top:16px">
+      <span class="d num" style="font-size:20px">${perG(house.price)}</span>
+      <span style="background:var(--clay-500);color:var(--palm);border-radius:var(--r-pill);
+        padding:10px 18px;font-size:12.5px;font-weight:700;white-space:nowrap">
+        ${esc(t().orderPickup)} →</span></span></button>
+
+  <div class="row-g" style="margin-top:16px">${FILTERS.map(([k,l]) =>
+    `<button class="pill" data-act="filter" data-arg="${k}"
+      aria-pressed="${S.filter===k}">${esc(t()[l])}</button>`).join('')}</div>
+
+  <button class="card" style="margin-top:16px;display:flex;justify-content:space-between;
+    align-items:center;gap:12px" data-act="nav" data-arg="locator">
+    <span><span style="font-weight:700;font-size:14.5px;display:block">Lighthouse · Chaweng</span>
+      <span class="muted" style="display:block;margin-top:2px">● ${esc(t().open)}</span></span>
+    <span style="font-size:13px;color:var(--fern);font-weight:700;white-space:nowrap">
+      ${esc(t().visit)} →</span></button>
+
+  <button class="pill leaf" style="width:100%;justify-content:center;margin-top:12px;
+    padding:13px 20px;font-weight:700;font-size:13px" data-act="cat" data-arg="bar">
+    ${esc(t().barTeaser)} →</button>
+  <button class="btn ghost" style="margin-top:10px;padding:13px 20px;font-size:13px"
+    data-act="tab" data-arg="learn">${esc(t().learnTeaser)} →</button>`;
+}
+
+function vMenu(){
+  const cats = `<div class="row-g" style="margin-top:14px">${CATS.map(k =>
+    `<button class="pill" data-act="cat" data-arg="${k}"
+      aria-pressed="${S.cat===k}">${esc(t()[k])}</button>`).join('')}</div>`;
+  let inner = '';
+
+  if(S.cat === 'flower'){
+    const list = STRAINS.filter(s => S.filter === 'all' || s.type === S.filter);
+    inner = `<div class="row-g" style="margin-top:10px">${FILTERS.map(([k,l]) =>
+        `<button class="pill" data-act="filter" data-arg="${k}"
+          aria-pressed="${S.filter===k}">${esc(t()[l])}</button>`).join('')}</div>
+      <div class="stack" style="gap:10px;margin-top:16px">${list.map(s => `
+        <div class="row">
+          <button class="photo" style="width:62px;height:62px;border-radius:12px"
+            data-act="open" data-arg="${s.id}" aria-label="${esc(s.name)}">photo</button>
+          <button style="flex:1;min-width:0" data-act="open" data-arg="${s.id}">
+            <span style="font-weight:700;font-size:15px;display:block">${esc(s.name)}</span>
+            <span class="muted" style="display:block;margin-top:2px;font-size:11.5px">
+              ${esc(labelOf(s))} · ${s.tags.join(' · ')}</span>
+            <span class="num" style="font-size:13.5px;font-weight:700;color:var(--clay-700);
+              display:block;margin-top:4px">${perG(s.price)}</span></button>
+          <button class="plus" data-act="add" data-arg="${s.id}"
+            aria-label="${esc(t().addToBag)} ${esc(s.name)}">+</button>
+        </div>`).join('')}</div>`;
+  }
+
+  if(S.cat === 'bar'){
+    inner = `<p class="muted" style="margin:12px 0 0;font-weight:600">${esc(t().barNote)}</p>
+      ${BAR.map(g => `<section style="margin-top:18px">
+        <h2 class="d" style="font-size:19px;margin:0">${esc(t()[g.key])}</h2>
+        <div class="stack" style="gap:8px;margin-top:10px">${g.items.map(([n,p]) =>
+          `<div class="spec"><span style="font-size:13.5px;font-weight:600">${esc(n)}</span>
+            <span class="d num" style="font-size:17px">${baht(p)}</span></div>`).join('')}
+        </div></section>`).join('')}`;
+  }
+
+  if(S.cat === 'tea'){
+    inner = `<p class="muted" style="margin:12px 0 0;font-weight:600">${esc(t().teaNote)}</p>
+      <div class="stack" style="gap:10px;margin-top:12px">${TEAS.map(x => `
+        <article class="card" style="padding:16px 18px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+            <h3 class="d" style="font-size:18px;margin:0">${esc(x.name)}</h3>
+            <span class="num" style="font-size:13px;font-weight:700;color:var(--clay-700);
+              white-space:nowrap">${baht(150)} · ${esc(t().ml)}</span></div>
+          <p style="font-size:12.5px;margin:6px 0 0;color:var(--n800)">
+            <b style="color:var(--fern)">${esc(t().taste)}:</b>
+            ${esc(th() ? x.tasteTh : x.taste)}</p>
+          <p style="font-size:12.5px;margin:2px 0 0;color:var(--n800)">
+            <b style="color:var(--fern)">${esc(t().effect)}:</b>
+            ${esc(th() ? x.effectTh : x.effect)}</p>
+        </article>`).join('')}</div>`;
+  }
+
+  if(S.cat === 'devices'){
+    inner = `<div class="stack" style="gap:10px;margin-top:16px">${DEVICES.map(([n,p]) => `
+      <div class="row">
+        <span class="photo" style="width:54px;height:54px;border-radius:12px">photo</span>
+        <span style="flex:1;font-weight:700;font-size:14.5px">${esc(n)}</span>
+        <span class="d num" style="font-size:17px">${baht(p)}</span>
+      </div>`).join('')}</div>`;
+  }
+
+  return `<h1 class="h1">${esc(t().menuTitle)}</h1>${cats}${inner}`;
+}
+
+function vDetail(){
+  const s = STRAINS.find(x => x.id === S.strain) || STRAINS[0];
+  return `<button style="font-size:13px;font-weight:700;color:var(--fern)"
+      data-act="tab" data-arg="menu">← ${esc(t().back)}</button>
+    <div class="photo" style="height:180px;border-radius:var(--r-lg);margin-top:14px;
+      font-size:10px">strain photo</div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;
+      gap:12px;margin-top:16px">
+      <h1 class="d" style="font-size:30px;margin:0">${esc(s.name)}</h1>
+      <span class="d num" style="font-size:20px;color:var(--clay-700);white-space:nowrap">
+        ${perG(s.price)}</span></div>
+    <p class="kicker" style="margin:6px 0 0">${esc(labelOf(s))}</p>
+    <div class="row-g" style="margin-top:12px">${s.tags.map(x =>
+      `<span class="pill tag">${esc(x)}</span>`).join('')}</div>
+    <p style="font-size:14px;line-height:1.65;color:var(--n800);margin:14px 0 0">
+      ${esc(strainDesc(s))}</p>
+    <button class="btn primary" style="margin-top:18px" data-act="add-open" data-arg="${s.id}">
+      ${esc(t().addToBag)} — <span class="num">${perG(s.price)}</span></button>
+    <p class="legal">${esc(t().pickupNote)}</p>`;
+}
+
+function vBag(){
+  if(S.ordered){
+    return `<h1 class="h1">${esc(t().bagTitle)}</h1>
+      <div class="card dark" style="margin-top:16px;padding:28px 22px;text-align:center">
+        <div style="width:54px;height:54px;border-radius:50%;background:var(--leaf);
+          color:var(--palm);display:grid;place-items:center;font-size:25px;font-weight:800;
+          margin:0 auto">✓</div>
+        <p class="d" style="font-size:24px;margin:14px 0 0">${esc(t().orderedTitle)}</p>
+        <p style="font-size:13px;margin:8px 0 0;color:var(--leaf)">${esc(t().orderedSub)}</p>
+        <p class="num" style="display:inline-block;border:1.5px solid var(--sage);
+          border-radius:var(--r-pill);padding:10px 22px;font-weight:700;font-size:17px;
+          letter-spacing:2px;margin:14px 0 0">${esc(S.code)}</p>
+        <button style="display:block;margin:14px auto 0;font-size:12.5px;color:var(--sage);
+          font-weight:600" data-act="reset">${esc(t().newBag)}</button>
+      </div>
+      <p class="legal">${esc(t().bagNote)}</p>`;
+  }
+  if(!S.bag.length){
+    return `<h1 class="h1">${esc(t().bagTitle)}</h1>
+      <div style="margin-top:52px;text-align:center;color:var(--fern)">
+        <p style="font-size:34px;margin:0">◎</p>
+        <p style="font-weight:700;margin:8px 0 0;color:var(--palm)">${esc(t().emptyTitle)}</p>
+        <p class="muted" style="margin:4px 0 0">${esc(t().emptySub)}</p>
+        <button class="pill" style="margin-top:16px;font-weight:700"
+          data-act="tab" data-arg="menu">${esc(t().browse)} →</button>
+      </div>`;
+  }
+  return `<h1 class="h1">${esc(t().bagTitle)}</h1>
+    <div class="stack" style="gap:10px;margin-top:16px">${S.bag.map(b => {
+      const s = STRAINS.find(x => x.id === b.id);
+      return `<div class="row" style="padding:14px 16px">
+        <span style="flex:1;min-width:0">
+          <span style="font-weight:700;font-size:14.5px;display:block">${esc(s.name)}</span>
+          <span class="muted num" style="display:block;font-size:11.5px">${perG(s.price)}</span></span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <button class="step" data-act="dec" data-arg="${s.id}"
+            aria-label="−1 ${esc(s.name)}">−</button>
+          <span class="num" style="font-weight:700;width:34px;text-align:center">
+            ${b.qty} ${esc(t().grams)}</span>
+          <button class="step" data-act="inc" data-arg="${s.id}"
+            aria-label="+1 ${esc(s.name)}">+</button></span>
+      </div>`;}).join('')}</div>
+    <div class="spec" style="margin-top:16px;padding:14px 22px">
+      <span style="font-size:13px;font-weight:600">${esc(t().total)}</span>
+      <span class="d num" style="font-size:22px">${baht(bagTotal())}</span></div>
+    <button class="btn primary" style="margin-top:14px" data-act="place">
+      ${esc(t().place)}</button>
+    <p class="legal">${esc(t().bagNote)}</p>`;
+}
+
+function vLearn(){
+  return `<h1 class="h1">${esc(t().learnTitle)}</h1>
+    <p class="muted" style="margin:6px 0 0;font-size:13px">${esc(t().learnSub)}</p>
+    <div class="stack" style="gap:10px;margin-top:16px">${GUIDES.map((g,i) => `
+      <article class="card${i===0 ? ' dark' : ''}" style="padding:20px">
+        <p class="kicker${i===0 ? ' on-dark' : ''}" style="margin:0">
+          ${i===0 ? esc(t().startHere) : esc(t().guide) + ' ' + g.n}</p>
+        <h2 class="d" style="font-size:20px;margin:6px 0 0">
+          ${esc(th() ? g.titleTh : g.title)}</h2>
+        <p style="font-size:12.5px;line-height:1.6;margin:6px 0 0;
+          color:${i===0 ? 'var(--leaf)' : 'var(--n800)'}">
+          ${esc(th() ? g.bodyTh : g.body)}</p>
+      </article>`).join('')}
+      <button class="btn ghost" style="padding:13px 20px;font-size:13px"
+        data-act="nav" data-arg="locator">${esc(t().talk)} →</button></div>`;
+}
+
+function vProfile(){
+  const left = Math.max(0, GOAL - POINTS);
+  const pct = Math.min(100, Math.round(POINTS / GOAL * 100));
+  const rewards = [['Free pre-roll',500],['10% off a visit',750],['House tote + lighter',1000]];
+  return `<div style="display:flex;align-items:center;gap:14px">
+      <span style="width:54px;height:54px;border-radius:50%;background:var(--clay);
+        color:var(--clay-100);display:grid;place-items:center;font-weight:800;
+        font-size:20px;flex:none">A</span>
+      <span><span class="d" style="font-size:22px;display:block">Alex Rivera</span>
+        <span class="muted" style="display:block">${esc(t().member)}</span></span></div>
+    <div class="card dark" style="margin-top:16px;padding:22px">
+      <p class="kicker on-dark" style="margin:0">LIGHTHOUSE CLUB · GOLD</p>
+      <p class="d num" style="font-size:40px;margin:6px 0 0">${POINTS}
+        <span style="font-size:16px">pts</span></p>
+      <div style="height:9px;border-radius:var(--r-pill);background:var(--pine);
+        margin-top:14px;overflow:hidden" role="img"
+        aria-label="${pct}% ${esc(t().toReward)}">
+        <div style="height:100%;width:${pct}%;border-radius:var(--r-pill);
+          background:var(--leaf)"></div></div>
+      <p style="font-size:12.5px;margin:8px 0 0;color:var(--leaf)">
+        <span class="num">${left}</span> ${esc(t().toReward)}</p></div>
+    <div class="stack" style="gap:8px;margin-top:14px">${rewards.map(([n,p]) =>
+      `<div class="spec" style="padding:12px 20px">
+        <span style="font-size:13px;font-weight:600">${esc(n)}</span>
+        <span class="num" style="font-size:13px;font-weight:700;color:var(--fern)">${p} pts</span>
+      </div>`).join('')}</div>
+    <div class="stack" style="gap:8px;margin-top:16px">
+      <button class="row" style="justify-content:space-between;padding:14px 18px"
+        data-act="nav" data-arg="locator">
+        <span style="font-size:13.5px;font-weight:600">${esc(t().storeInfo)}</span><span>→</span></button>
+      <div class="row" style="justify-content:space-between;padding:14px 18px">
+        <span style="font-size:13.5px;font-weight:600">${esc(t().history)}</span><span>→</span></div>
+      <div class="row" style="justify-content:space-between;padding:14px 18px">
+        <span style="font-size:13.5px;font-weight:600">${esc(t().language)}</span>
+        <span style="display:flex;gap:10px">
+          <button data-act="lang" data-arg="en" aria-pressed="${!th()}"
+            style="font-weight:${th()?'500':'800'};color:${th()?'var(--moss)':'var(--palm)'}">EN</button>
+          <span style="color:var(--sage)">·</span>
+          <button data-act="lang" data-arg="th" aria-pressed="${th()}"
+            style="font-weight:${th()?'800':'500'};color:${th()?'var(--palm)':'var(--moss)'}">ไทย</button>
+        </span></div></div>`;
+}
+
+function vLocator(){
+  return `<button style="font-size:13px;font-weight:700;color:var(--fern)"
+      data-act="tab" data-arg="home">← ${esc(t().home)}</button>
+    <h1 class="h1" style="margin-top:10px">${esc(t().findUs)}</h1>
+    <div class="photo" style="height:158px;border-radius:var(--r-lg);margin-top:14px;
+      font-size:10px">map — Chaweng, Ko Samui</div>
+    <div class="card" style="margin-top:14px">
+      <p style="font-weight:700;font-size:15px;margin:0">Lighthouse Samui</p>
+      <p style="font-size:12.5px;color:var(--n800);margin:4px 0 0;line-height:1.6">
+        Chaweng, Ko Samui · Surat Thani<br>Cannabis shop · Coffee · Bar · Game consoles</p>
+      <p style="font-size:12.5px;color:var(--fern);font-weight:700;margin:8px 0 0">
+        ● ${esc(t().openDaily)}</p></div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <a class="btn primary" style="flex:1;padding:13px;font-size:13px;text-decoration:none"
+        href="https://maps.google.com/?q=Lighthouse+Samui+Chaweng+Ko+Samui"
+        target="_blank" rel="noopener noreferrer">${esc(t().maps)}</a>
+      <a class="btn ghost" style="flex:1;padding:13px;font-size:13px;text-decoration:none"
+        href="tel:+66988862998">${esc(t().call)}</a></div>
+    <p class="legal">${esc(t().locFoot)}</p>`;
+}
+
+/* ── shell ─────────────────────────────────────────────── */
+const VIEWS = {gate:vGate,home:vHome,menu:vMenu,detail:vDetail,bag:vBag,
+               learn:vLearn,profile:vProfile,locator:vLocator};
+const view = document.getElementById('view');
+const tabs = document.getElementById('tabs');
+
+function render(){
+  const gate = S.view === 'gate';
+  view.className = 'view fade' + (gate ? ' dark' : '');
+  view.innerHTML = VIEWS[S.view]();
+  view.scrollTop = 0;
+  tabs.hidden = gate;
+  if(!gate){
+    const n = bagCount();
+    const active = S.view === 'detail' ? 'menu' : S.view;
+    tabs.innerHTML = TABS.map(([k,ic]) => `
+      <button class="tab" data-act="tab" data-arg="${k}"
+        ${active===k ? 'aria-current="page"' : ''}>
+        <span class="ic" aria-hidden="true">${ic}</span>
+        <span class="lb">${esc(t()[k==='bag'?'bagTab':k])}</span>
+        ${k==='bag' && n ? `<span class="badge num">${n}</span>` : ''}
+      </button>`).join('');
+  }
+  document.documentElement.lang = S.lang;
+}
+
+function addToBag(id){
+  const hit = S.bag.find(b => b.id === id);
+  if(hit) hit.qty++; else S.bag.push({id, qty:1});
+  S.ordered = false;
+}
+
+document.querySelector('.app').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if(!el) return;
+  const act = el.dataset.act, arg = el.dataset.arg;
+  const id = Number(arg);
+  switch(act){
+    case 'gate-yes': S.view = 'home'; S.denied = false; save(); break;
+    case 'gate-no':  S.denied = true; break;
+    case 'lang':     S.lang = arg; save(); break;
+    case 'tab':      S.view = arg; break;
+    case 'nav':      S.view = arg; break;
+    case 'cat':      S.cat = arg; S.view = 'menu'; break;
+    case 'filter':   S.filter = arg; S.cat = 'flower'; S.view = 'menu'; break;
+    case 'open':     S.strain = id; S.view = 'detail'; break;
+    case 'add':      addToBag(id); break;
+    case 'add-open': addToBag(id); S.view = 'bag'; break;
+    case 'inc':      addToBag(id); break;
+    case 'dec': {
+      const b = S.bag.find(x => x.id === id);
+      if(b && --b.qty <= 0) S.bag = S.bag.filter(x => x.id !== id);
+      break;
+    }
+    case 'place':
+      S.code = 'LH-' + String(2000 + Math.floor(Math.random() * 900));
+      S.ordered = true; S.bag = []; break;
+    case 'reset': S.ordered = false; S.view = 'menu'; break;
+    default: return;
+  }
+  render();
+});
+
+render();
+</script>

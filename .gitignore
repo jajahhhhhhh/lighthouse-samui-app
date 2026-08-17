@@ -1,0 +1,7 @@
+# Generated. Rebuild everything with:  node watch.mjs --once --plates
+app/lighthouse-menu.html
+dist/
+canvas/*.png
+canvas/*.pdf
+canvas/__pycache__/
+.DS_Store
