@@ -1,5 +1,6 @@
 # Generated. Rebuild everything with:  node watch.mjs --once --plates
 app/lighthouse-menu.html
+app/artifact-body.html
 dist/
 canvas/*.png
 canvas/*.pdf
