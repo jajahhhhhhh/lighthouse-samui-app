@@ -247,6 +247,13 @@ const GUIDES = [
    bodyTh:'THC เด่น CBD สูง เทอร์ปีน — คำเหล่านี้บนป้ายหมายถึงอะไร'}
 ];
 
+// The striped placeholder stays behind this iframe as the fallback: hosts that
+// forbid external frames (the artifact CSP does) show it instead of a blank box.
+const MAP_SRC = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d245.9221963708'
+  + '2692!2d100.06128024032505!3d9.529990091332888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13'
+  + '.1!3m3!1m2!1s0x3054f196dc5bf5fb%3A0x72f5462f4fd5d36b!2sLighthouse%20Samui!5e0!3m2!1'
+  + 'sth!2sth!4v1786990745063!5m2!1sth!2sth';
+
 const POINTS = 320, GOAL = 500;
 const FILTERS = [['all','all'],['sativa','daytime'],['indica','evening'],
   ['hybrid','balanced'],['cbd','cbd']];
@@ -553,8 +560,12 @@ function vLocator(){
   return `<button style="font-size:14px;font-weight:700;color:var(--fern)"
       data-act="tab" data-arg="home">← ${esc(t().home)}</button>
     <h1 class="h1" style="margin-top:10px">${esc(t().findUs)}</h1>
-    <div class="photo" style="height:158px;border-radius:var(--r-lg);margin-top:14px;
-      font-size:11px">map — Chaweng, Ko Samui</div>
+    <div class="photo" style="height:180px;border-radius:var(--r-lg);margin-top:14px;
+      font-size:11px;overflow:hidden;position:relative">map — Chaweng, Ko Samui
+      <iframe src="${MAP_SRC}" title="Lighthouse Samui on the map" loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"
+      ></iframe></div>
     <div class="card" style="margin-top:14px">
       <p style="font-weight:700;font-size:16px;margin:0">Lighthouse Samui</p>
       <p style="font-size:13.5px;color:var(--n800);margin:4px 0 0;line-height:1.6">
