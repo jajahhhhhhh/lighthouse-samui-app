@@ -4,6 +4,9 @@ Customer menu app for **Lighthouse Samui** — a cannabis shop, bar and café in
 Chaweng, Ko Samui — together with the design system it's built from and the
 scripts that render both.
 
+**Live:** <https://jajahhhhhhh.github.io/lighthouse-samui-app/> ·
+design system at [`/design/`](https://jajahhhhhhh.github.io/lighthouse-samui-app/design/screens/home.html)
+
 The app is a single self-contained HTML page. No framework, no bundler, no
 `package.json`, no dependencies. It runs from a `file://` path, from any static
 host, or embedded anywhere a single file can go.
