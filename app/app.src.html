@@ -18,7 +18,7 @@
 html,body{margin:0;padding:0}
 body{
   background:var(--palm); color:var(--palm);
-  font-family:var(--ui); font-size:15px; line-height:1.5;
+  font-family:var(--ui); font-size:16px; line-height:1.5;
   -webkit-font-smoothing:antialiased;
   min-height:100dvh; display:grid; place-items:center;
 }
@@ -45,24 +45,24 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;
 /* ── type ──────────────────────────────────────────────── */
 .d{font-family:var(--display);font-weight:400;line-height:1.08}
 .h1{font-family:var(--display);font-size:28px;line-height:1.1;margin:0}
-.kicker{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--fern);
+.kicker{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--fern);
   text-transform:uppercase}
 .kicker.on-dark{color:var(--sage)}
 .num{font-variant-numeric:tabular-nums}
-.muted{color:var(--fern);font-size:12.5px}
-.legal{font-size:11px;color:var(--fern);text-align:center;line-height:1.55;margin-top:12px}
+.muted{color:var(--fern);font-size:13.5px}
+.legal{font-size:12px;color:var(--fern);text-align:center;line-height:1.55;margin-top:12px}
 
 /* ── atoms ─────────────────────────────────────────────── */
 .stack{display:flex;flex-direction:column}
 .row-g{display:flex;gap:8px;flex-wrap:wrap}
 .pill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--sage);
-  border-radius:var(--r-pill);padding:8px 15px;font-size:12.5px;font-weight:600;
+  border-radius:var(--r-pill);padding:8px 15px;font-size:13.5px;font-weight:600;
   color:var(--pine);background:transparent;transition:background .12s,color .12s}
 .pill[aria-pressed="true"]{background:var(--palm);border-color:var(--palm);color:var(--mist)}
 .pill.tag{padding:6px 14px}
 .pill.leaf{background:var(--leaf);border-color:var(--leaf);color:var(--palm)}
 .btn{display:block;width:100%;text-align:center;border-radius:var(--r-pill);
-  padding:15px 20px;font-weight:700;font-size:14.5px;transition:filter .12s}
+  padding:15px 20px;font-weight:700;font-size:15.5px;transition:filter .12s}
 .btn:hover{filter:brightness(.96)}
 .btn.primary{background:var(--clay);color:var(--clay-100)}
 .btn.solid{background:var(--mist);color:var(--palm)}
@@ -77,7 +77,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;
   border-radius:var(--r-md);padding:12px;width:100%;text-align:left}
 .photo{background:repeating-linear-gradient(45deg,var(--mist),var(--mist) 6px,
   var(--shore) 6px,var(--shore) 12px);display:grid;place-items:center;flex:none;
-  font-size:8px;letter-spacing:.5px;color:var(--moss);font-weight:600}
+  font-size:9px;letter-spacing:.5px;color:var(--moss);font-weight:600}
 .plus{flex:none;width:36px;height:36px;border-radius:var(--r-pill);background:var(--palm);
   color:var(--mist);display:grid;place-items:center;font-weight:800;font-size:19px}
 .step{width:32px;height:32px;border-radius:var(--r-pill);border:1.5px solid var(--sage);
@@ -93,9 +93,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;
   border-radius:12px}
 .tab[aria-current="page"]{color:var(--palm)}
 .tab .ic{font-size:17px;line-height:1.2}
-.tab .lb{font-size:9.5px;font-weight:700;margin-top:1px}
+.tab .lb{font-size:10.5px;font-weight:700;margin-top:1px}
 .badge{position:absolute;top:-1px;right:4px;background:var(--clay);color:var(--clay-100);
-  border-radius:var(--r-pill);min-width:17px;height:17px;font-size:10px;font-weight:800;
+  border-radius:var(--r-pill);min-width:17px;height:17px;font-size:11px;font-weight:800;
   display:grid;place-items:center;padding:0 4px}
 
 /* ── gate ──────────────────────────────────────────────── */
@@ -287,7 +287,7 @@ function vGate(){
       ${esc(t().welcome)}<br>lighthouse</h1>
     <p class="kicker on-dark" style="margin:12px 0 0;letter-spacing:3.5px">
       CANNABIS SHOP · BAR · CAFÉ · SAMUI</p>
-    <p style="color:var(--leaf);margin:22px 0 0;font-size:14px">
+    <p style="color:var(--leaf);margin:22px 0 0;font-size:15px">
       ${esc(t().ageQ)}<br>${esc(t().ageQ2)}</p>
     <div class="stack" style="gap:10px;margin-top:24px">
       <button class="btn solid" data-act="gate-yes">${esc(t().yes)}</button>
@@ -301,9 +301,9 @@ function vGate(){
         background:${th()?'var(--mist)':'transparent'}"
         data-act="lang" data-arg="th" aria-pressed="${th()}">ไทย</button>
     </div>
-    ${S.denied ? `<p style="color:var(--sage);margin:18px 0 0;font-size:13px" role="status">
+    ${S.denied ? `<p style="color:var(--sage);margin:18px 0 0;font-size:14px" role="status">
       ${esc(t().denied)}</p>` : ''}
-    <p style="color:var(--moss);margin:20px 0 0;font-size:11.5px;line-height:1.6">
+    <p style="color:var(--moss);margin:20px 0 0;font-size:12.5px;line-height:1.6">
       ${esc(t().gateFoot)}</p>
   </div>`;
 }
@@ -319,20 +319,20 @@ function vHome(){
   </header>
 
   <button class="spec" style="margin-top:16px" data-act="tab" data-arg="profile">
-    <span style="font-size:13px;font-weight:600">✦ <span class="num">${POINTS}</span> ${esc(t().pts)}</span>
-    <span style="font-size:12.5px;font-weight:700;color:var(--fern);white-space:nowrap">
+    <span style="font-size:14px;font-weight:600">✦ <span class="num">${POINTS}</span> ${esc(t().pts)}</span>
+    <span style="font-size:13.5px;font-weight:700;color:var(--fern);white-space:nowrap">
       ${esc(t().rewards)} →</span></button>
 
   <button class="card dark" style="margin-top:14px" data-act="open" data-arg="1">
     <p class="kicker on-dark" style="margin:0">${esc(t().houseKicker)}</p>
     <p class="d" style="font-size:30px;margin:6px 0 0">${esc(house.name)}</p>
-    <p style="font-size:12.5px;margin:6px 0 0;color:var(--leaf)">
+    <p style="font-size:13.5px;margin:6px 0 0;color:var(--leaf)">
       ${house.tags.join(' · ')}</p>
     <span style="display:flex;justify-content:space-between;align-items:center;
       gap:12px;margin-top:16px">
       <span class="d num" style="font-size:20px">${perG(house.price)}</span>
       <span style="background:var(--clay-500);color:var(--palm);border-radius:var(--r-pill);
-        padding:10px 18px;font-size:12.5px;font-weight:700;white-space:nowrap">
+        padding:10px 18px;font-size:13.5px;font-weight:700;white-space:nowrap">
         ${esc(t().orderPickup)} →</span></span></button>
 
   <div class="row-g" style="margin-top:16px">${FILTERS.map(([k,l]) =>
@@ -341,15 +341,15 @@ function vHome(){
 
   <button class="card" style="margin-top:16px;display:flex;justify-content:space-between;
     align-items:center;gap:12px" data-act="nav" data-arg="locator">
-    <span><span style="font-weight:700;font-size:14.5px;display:block">Lighthouse · Chaweng</span>
+    <span><span style="font-weight:700;font-size:15.5px;display:block">Lighthouse · Chaweng</span>
       <span class="muted" style="display:block;margin-top:2px">● ${esc(t().open)}</span></span>
-    <span style="font-size:13px;color:var(--fern);font-weight:700;white-space:nowrap">
+    <span style="font-size:14px;color:var(--fern);font-weight:700;white-space:nowrap">
       ${esc(t().visit)} →</span></button>
 
   <button class="pill leaf" style="width:100%;justify-content:center;margin-top:12px;
-    padding:13px 20px;font-weight:700;font-size:13px" data-act="cat" data-arg="bar">
+    padding:13px 20px;font-weight:700;font-size:14px" data-act="cat" data-arg="bar">
     ${esc(t().barTeaser)} →</button>
-  <button class="btn ghost" style="margin-top:10px;padding:13px 20px;font-size:13px"
+  <button class="btn ghost" style="margin-top:10px;padding:13px 20px;font-size:14px"
     data-act="tab" data-arg="learn">${esc(t().learnTeaser)} →</button>`;
 }
 
@@ -369,10 +369,10 @@ function vMenu(){
           <button class="photo" style="width:62px;height:62px;border-radius:12px"
             data-act="open" data-arg="${s.id}" aria-label="${esc(s.name)}">photo</button>
           <button style="flex:1;min-width:0" data-act="open" data-arg="${s.id}">
-            <span style="font-weight:700;font-size:15px;display:block">${esc(s.name)}</span>
-            <span class="muted" style="display:block;margin-top:2px;font-size:11.5px">
+            <span style="font-weight:700;font-size:16px;display:block">${esc(s.name)}</span>
+            <span class="muted" style="display:block;margin-top:2px;font-size:12.5px">
               ${esc(labelOf(s))} · ${s.tags.join(' · ')}</span>
-            <span class="num" style="font-size:13.5px;font-weight:700;color:var(--clay-700);
+            <span class="num" style="font-size:14.5px;font-weight:700;color:var(--clay-700);
               display:block;margin-top:4px">${perG(s.price)}</span></button>
           <button class="plus" data-act="add" data-arg="${s.id}"
             aria-label="${esc(t().addToBag)} ${esc(s.name)}">+</button>
@@ -384,7 +384,7 @@ function vMenu(){
       ${BAR.map(g => `<section style="margin-top:18px">
         <h2 class="d" style="font-size:19px;margin:0">${esc(t()[g.key])}</h2>
         <div class="stack" style="gap:8px;margin-top:10px">${g.items.map(([n,p]) =>
-          `<div class="spec"><span style="font-size:13.5px;font-weight:600">${esc(n)}</span>
+          `<div class="spec"><span style="font-size:14.5px;font-weight:600">${esc(n)}</span>
             <span class="d num" style="font-size:17px">${baht(p)}</span></div>`).join('')}
         </div></section>`).join('')}`;
   }
@@ -395,12 +395,12 @@ function vMenu(){
         <article class="card" style="padding:16px 18px">
           <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
             <h3 class="d" style="font-size:18px;margin:0">${esc(x.name)}</h3>
-            <span class="num" style="font-size:13px;font-weight:700;color:var(--clay-700);
+            <span class="num" style="font-size:14px;font-weight:700;color:var(--clay-700);
               white-space:nowrap">${baht(150)} · ${esc(t().ml)}</span></div>
-          <p style="font-size:12.5px;margin:6px 0 0;color:var(--n800)">
+          <p style="font-size:13.5px;margin:6px 0 0;color:var(--n800)">
             <b style="color:var(--fern)">${esc(t().taste)}:</b>
             ${esc(th() ? x.tasteTh : x.taste)}</p>
-          <p style="font-size:12.5px;margin:2px 0 0;color:var(--n800)">
+          <p style="font-size:13.5px;margin:2px 0 0;color:var(--n800)">
             <b style="color:var(--fern)">${esc(t().effect)}:</b>
             ${esc(th() ? x.effectTh : x.effect)}</p>
         </article>`).join('')}</div>`;
@@ -410,7 +410,7 @@ function vMenu(){
     inner = `<div class="stack" style="gap:10px;margin-top:16px">${DEVICES.map(([n,p]) => `
       <div class="row">
         <span class="photo" style="width:54px;height:54px;border-radius:12px">photo</span>
-        <span style="flex:1;font-weight:700;font-size:14.5px">${esc(n)}</span>
+        <span style="flex:1;font-weight:700;font-size:15.5px">${esc(n)}</span>
         <span class="d num" style="font-size:17px">${baht(p)}</span>
       </div>`).join('')}</div>`;
   }
@@ -420,10 +420,10 @@ function vMenu(){
 
 function vDetail(){
   const s = STRAINS.find(x => x.id === S.strain) || STRAINS[0];
-  return `<button style="font-size:13px;font-weight:700;color:var(--fern)"
+  return `<button style="font-size:14px;font-weight:700;color:var(--fern)"
       data-act="tab" data-arg="menu">← ${esc(t().back)}</button>
     <div class="photo" style="height:180px;border-radius:var(--r-lg);margin-top:14px;
-      font-size:10px">strain photo</div>
+      font-size:11px">strain photo</div>
     <div style="display:flex;justify-content:space-between;align-items:baseline;
       gap:12px;margin-top:16px">
       <h1 class="d" style="font-size:30px;margin:0">${esc(s.name)}</h1>
@@ -432,7 +432,7 @@ function vDetail(){
     <p class="kicker" style="margin:6px 0 0">${esc(labelOf(s))}</p>
     <div class="row-g" style="margin-top:12px">${s.tags.map(x =>
       `<span class="pill tag">${esc(x)}</span>`).join('')}</div>
-    <p style="font-size:14px;line-height:1.65;color:var(--n800);margin:14px 0 0">
+    <p style="font-size:15px;line-height:1.65;color:var(--n800);margin:14px 0 0">
       ${esc(strainDesc(s))}</p>
     <button class="btn primary" style="margin-top:18px" data-act="add-open" data-arg="${s.id}">
       ${esc(t().addToBag)} — <span class="num">${perG(s.price)}</span></button>
@@ -447,11 +447,11 @@ function vBag(){
           color:var(--palm);display:grid;place-items:center;font-size:25px;font-weight:800;
           margin:0 auto">✓</div>
         <p class="d" style="font-size:24px;margin:14px 0 0">${esc(t().orderedTitle)}</p>
-        <p style="font-size:13px;margin:8px 0 0;color:var(--leaf)">${esc(t().orderedSub)}</p>
+        <p style="font-size:14px;margin:8px 0 0;color:var(--leaf)">${esc(t().orderedSub)}</p>
         <p class="num" style="display:inline-block;border:1.5px solid var(--sage);
           border-radius:var(--r-pill);padding:10px 22px;font-weight:700;font-size:17px;
           letter-spacing:2px;margin:14px 0 0">${esc(S.code)}</p>
-        <button style="display:block;margin:14px auto 0;font-size:12.5px;color:var(--sage);
+        <button style="display:block;margin:14px auto 0;font-size:13.5px;color:var(--sage);
           font-weight:600" data-act="reset">${esc(t().newBag)}</button>
       </div>
       <p class="legal">${esc(t().bagNote)}</p>`;
@@ -471,8 +471,8 @@ function vBag(){
       const s = STRAINS.find(x => x.id === b.id);
       return `<div class="row" style="padding:14px 16px">
         <span style="flex:1;min-width:0">
-          <span style="font-weight:700;font-size:14.5px;display:block">${esc(s.name)}</span>
-          <span class="muted num" style="display:block;font-size:11.5px">${perG(s.price)}</span></span>
+          <span style="font-weight:700;font-size:15.5px;display:block">${esc(s.name)}</span>
+          <span class="muted num" style="display:block;font-size:12.5px">${perG(s.price)}</span></span>
         <span style="display:flex;align-items:center;gap:10px">
           <button class="step" data-act="dec" data-arg="${s.id}"
             aria-label="−1 ${esc(s.name)}">−</button>
@@ -482,7 +482,7 @@ function vBag(){
             aria-label="+1 ${esc(s.name)}">+</button></span>
       </div>`;}).join('')}</div>
     <div class="spec" style="margin-top:16px;padding:14px 22px">
-      <span style="font-size:13px;font-weight:600">${esc(t().total)}</span>
+      <span style="font-size:14px;font-weight:600">${esc(t().total)}</span>
       <span class="d num" style="font-size:22px">${baht(bagTotal())}</span></div>
     <button class="btn primary" style="margin-top:14px" data-act="place">
       ${esc(t().place)}</button>
@@ -491,18 +491,18 @@ function vBag(){
 
 function vLearn(){
   return `<h1 class="h1">${esc(t().learnTitle)}</h1>
-    <p class="muted" style="margin:6px 0 0;font-size:13px">${esc(t().learnSub)}</p>
+    <p class="muted" style="margin:6px 0 0;font-size:14px">${esc(t().learnSub)}</p>
     <div class="stack" style="gap:10px;margin-top:16px">${GUIDES.map((g,i) => `
       <article class="card${i===0 ? ' dark' : ''}" style="padding:20px">
         <p class="kicker${i===0 ? ' on-dark' : ''}" style="margin:0">
           ${i===0 ? esc(t().startHere) : esc(t().guide) + ' ' + g.n}</p>
         <h2 class="d" style="font-size:20px;margin:6px 0 0">
           ${esc(th() ? g.titleTh : g.title)}</h2>
-        <p style="font-size:12.5px;line-height:1.6;margin:6px 0 0;
+        <p style="font-size:13.5px;line-height:1.6;margin:6px 0 0;
           color:${i===0 ? 'var(--leaf)' : 'var(--n800)'}">
           ${esc(th() ? g.bodyTh : g.body)}</p>
       </article>`).join('')}
-      <button class="btn ghost" style="padding:13px 20px;font-size:13px"
+      <button class="btn ghost" style="padding:13px 20px;font-size:14px"
         data-act="nav" data-arg="locator">${esc(t().talk)} →</button></div>`;
 }
 
@@ -519,27 +519,27 @@ function vProfile(){
     <div class="card dark" style="margin-top:16px;padding:22px">
       <p class="kicker on-dark" style="margin:0">LIGHTHOUSE CLUB · GOLD</p>
       <p class="d num" style="font-size:40px;margin:6px 0 0">${POINTS}
-        <span style="font-size:16px">pts</span></p>
+        <span style="font-size:17px">pts</span></p>
       <div style="height:9px;border-radius:var(--r-pill);background:var(--pine);
         margin-top:14px;overflow:hidden" role="img"
         aria-label="${pct}% ${esc(t().toReward)}">
         <div style="height:100%;width:${pct}%;border-radius:var(--r-pill);
           background:var(--leaf)"></div></div>
-      <p style="font-size:12.5px;margin:8px 0 0;color:var(--leaf)">
+      <p style="font-size:13.5px;margin:8px 0 0;color:var(--leaf)">
         <span class="num">${left}</span> ${esc(t().toReward)}</p></div>
     <div class="stack" style="gap:8px;margin-top:14px">${rewards.map(([n,p]) =>
       `<div class="spec" style="padding:12px 20px">
-        <span style="font-size:13px;font-weight:600">${esc(n)}</span>
-        <span class="num" style="font-size:13px;font-weight:700;color:var(--fern)">${p} pts</span>
+        <span style="font-size:14px;font-weight:600">${esc(n)}</span>
+        <span class="num" style="font-size:14px;font-weight:700;color:var(--fern)">${p} pts</span>
       </div>`).join('')}</div>
     <div class="stack" style="gap:8px;margin-top:16px">
       <button class="row" style="justify-content:space-between;padding:14px 18px"
         data-act="nav" data-arg="locator">
-        <span style="font-size:13.5px;font-weight:600">${esc(t().storeInfo)}</span><span>→</span></button>
+        <span style="font-size:14.5px;font-weight:600">${esc(t().storeInfo)}</span><span>→</span></button>
       <div class="row" style="justify-content:space-between;padding:14px 18px">
-        <span style="font-size:13.5px;font-weight:600">${esc(t().history)}</span><span>→</span></div>
+        <span style="font-size:14.5px;font-weight:600">${esc(t().history)}</span><span>→</span></div>
       <div class="row" style="justify-content:space-between;padding:14px 18px">
-        <span style="font-size:13.5px;font-weight:600">${esc(t().language)}</span>
+        <span style="font-size:14.5px;font-weight:600">${esc(t().language)}</span>
         <span style="display:flex;gap:10px">
           <button data-act="lang" data-arg="en" aria-pressed="${!th()}"
             style="font-weight:${th()?'500':'800'};color:${th()?'var(--moss)':'var(--palm)'}">EN</button>
@@ -550,22 +550,22 @@ function vProfile(){
 }
 
 function vLocator(){
-  return `<button style="font-size:13px;font-weight:700;color:var(--fern)"
+  return `<button style="font-size:14px;font-weight:700;color:var(--fern)"
       data-act="tab" data-arg="home">← ${esc(t().home)}</button>
     <h1 class="h1" style="margin-top:10px">${esc(t().findUs)}</h1>
     <div class="photo" style="height:158px;border-radius:var(--r-lg);margin-top:14px;
-      font-size:10px">map — Chaweng, Ko Samui</div>
+      font-size:11px">map — Chaweng, Ko Samui</div>
     <div class="card" style="margin-top:14px">
-      <p style="font-weight:700;font-size:15px;margin:0">Lighthouse Samui</p>
-      <p style="font-size:12.5px;color:var(--n800);margin:4px 0 0;line-height:1.6">
+      <p style="font-weight:700;font-size:16px;margin:0">Lighthouse Samui</p>
+      <p style="font-size:13.5px;color:var(--n800);margin:4px 0 0;line-height:1.6">
         Chaweng, Ko Samui · Surat Thani<br>Cannabis shop · Coffee · Bar · Game consoles</p>
-      <p style="font-size:12.5px;color:var(--fern);font-weight:700;margin:8px 0 0">
+      <p style="font-size:13.5px;color:var(--fern);font-weight:700;margin:8px 0 0">
         ● ${esc(t().openDaily)}</p></div>
     <div style="display:flex;gap:10px;margin-top:12px">
-      <a class="btn primary" style="flex:1;padding:13px;font-size:13px;text-decoration:none"
+      <a class="btn primary" style="flex:1;padding:13px;font-size:14px;text-decoration:none"
         href="https://maps.google.com/?q=Lighthouse+Samui+Chaweng+Ko+Samui"
         target="_blank" rel="noopener noreferrer">${esc(t().maps)}</a>
-      <a class="btn ghost" style="flex:1;padding:13px;font-size:13px;text-decoration:none"
+      <a class="btn ghost" style="flex:1;padding:13px;font-size:14px;text-decoration:none"
         href="tel:+66988862998">${esc(t().call)}</a></div>
     <p class="legal">${esc(t().locFoot)}</p>`;
 }
