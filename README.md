@@ -105,9 +105,19 @@ node watch.mjs --once
 # then serve app/lighthouse-menu.html from any static host
 ```
 
+## Licence
+
+The project is [MIT licensed](LICENSE).
+
+The three typefaces embedded in `app/fonts.css` are **not** — Caprasimo,
+Figtree and Noto Sans Thai are each under the SIL Open Font License 1.1, whose
+terms and copyright notices are reproduced in
+[`app/FONTS-LICENSE.txt`](app/FONTS-LICENSE.txt). The OFL permits embedding and
+redistribution; it also requires that notice to travel with the fonts, which is
+why it ships in the repo. If you reuse this code, keep that file with it.
+
 ## Notes
 
 - Product photography is a placeholder pattern throughout; no images ship here.
 - The loyalty account is a fixture for demonstrating the screen. There is no
   authentication and no backend.
-- No licence file yet — all rights reserved by default until one is added.
