@@ -35,6 +35,7 @@ jobs:
           mkdir -p _site/design
           cp app/lighthouse-menu.html _site/index.html
           cp -R dist/. _site/design/
+          echo 'menu.lighthousekohsamui.com' > _site/CNAME
           test -s _site/index.html
           echo "cards: $(find _site/design -name '*.html' | wc -l)"
 
